@@ -32,10 +32,10 @@ export default defineComponent({
     })
     const pushMessage = (chatData) => {
       data.chat.push(chatData) // 引数で受け取ったChatDataを配列にpush
+    }
     return {
       data,
       pushMessage
-    }
     }
   },
 })
