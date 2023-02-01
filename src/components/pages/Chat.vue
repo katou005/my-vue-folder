@@ -24,7 +24,7 @@ export default defineComponent({
     })
     data.user = getAuth().currentUser;
     data.displayName = data.user.displayName ?? '自分さん'; // 追加
-
+    const refMessage = ref(getDatabase(), 'chat');
     onValue(refMessage, (snapshot) => {
     const data = snapshot.val();
     updateChat(data);
