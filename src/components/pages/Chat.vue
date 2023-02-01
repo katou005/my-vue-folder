@@ -1,15 +1,19 @@
 <script>
+import DisplayName from '../chat/DisplayName.vue'
 import { defineComponent, reactive } from 'vue'
 import View from '../chat/View.vue' // 追加
 import Send from '../chat/Send.vue'
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, updateProfile } from "firebase/auth";
 import { getDatabase, ref, push, onValue } from "firebase/database";
+import Header from '../header/Header.vue'
 
 
 export default defineComponent({
   components: {
     View,
-    Send
+    Send,
+    DisplayName,
+    Header,
   },
   setup() {
     const data = reactive({
@@ -19,7 +23,7 @@ export default defineComponent({
       displayName: ''
     })
     data.user = getAuth().currentUser;
-    const refMessage = ref(getDatabase(), 'chat'); // 追加
+    data.displayName = data.user.displayName ?? '自分さん'; // 追加
 
     onValue(refMessage, (snapshot) => {
     const data = snapshot.val();
@@ -28,15 +32,12 @@ export default defineComponent({
 
     const pushMessage = (chatData) => {
      chatData.uid = data.user.uid // 追加
+     chatData.displayName = data.displayName // 追加
      //data.chat.push(chatData)
      const db = getDatabase();
      push(ref(db, 'chat'), chatData);
     };
 
-    return {
-      data,
-      pushMessage
-    }
     const updateChat = (snap) => {
      data.chat = [];
      for (const key in snap) {
@@ -46,6 +47,18 @@ export default defineComponent({
         displayName: snap[key].displayName
        })
      }
+    }
+    const updateDisplayName = (name) => {
+      updateProfile(data.user, {
+        displayName: name
+      });
+      data.displayName = name
+    }
+
+    return {
+      data,
+      pushMessage,
+      updateDisplayName //追加
     }
   },
   beforeRouteEnter: (to, from, next) => {
@@ -62,7 +75,9 @@ export default defineComponent({
 </script>
 
 <template>
+  <Header />  <!-- 追加 -->
   <div class="container">
+    <DisplayName v-model="data.displayName" @update="updateDisplayName" />
     <View :data="data" />
     <Send @sendMessage="pushMessage" />
   </div>
