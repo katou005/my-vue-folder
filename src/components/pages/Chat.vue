@@ -2,6 +2,9 @@
 import { defineComponent, reactive } from 'vue'
 import View from '../chat/View.vue' // 追加
 import Send from '../chat/Send.vue'
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getDatabase, ref, push } from "firebase/database";
+
 
 export default defineComponent({
   components: {
@@ -31,14 +34,22 @@ export default defineComponent({
       displayName: ''
     })
     const pushMessage = (chatData) => {
-      data.chat.push(chatData) // 引数で受け取ったChatDataを配列にpush
-    }
-    return {
-      data,
-      pushMessage
-    }
+     data.chat.push(chatData)
+     const db = getDatabase(); // 追加
+     push(ref(db, 'chat'), chatData); // 追加
+    };
   },
-})
+  beforeRouteEnter: (to, from, next) => {
+  const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      next();
+    } else {
+      next('/login');
+    }
+  });
+}
+});
 </script>
 
 <template>

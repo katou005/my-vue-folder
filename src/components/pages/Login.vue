@@ -1,6 +1,27 @@
 <script setup>
 import Email from '../input/Email.vue'
 import Password from '../input/Password.vue' // 追加
+import { reactive } from '@vue/reactivity'
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useRouter } from "vue-router"
+
+const data = reactive({
+  email: '',
+  password: '',
+})
+const router = useRouter()
+const auth = getAuth();
+const login = () => {
+  signInWithEmailAndPassword(auth, data.email, data.password)
+    .then((userCredential) => {
+      // alert("ログインに成功しました！") →　削除
+      router.push('/');
+    })
+    .catch((err) => {
+      console.log(err)
+      alert("正しいログイン情報を入力してください")
+    });
+}
 </script>
 
 <template>
@@ -13,10 +34,10 @@ import Password from '../input/Password.vue' // 追加
 
               <h3 class="mb-5">Login</h3>
 
-              <Email id="email-address" title="EmailAddress" />
-              <Password id="password" title="password" />
+              <Email id="email-address" title="EmailAddress" v-model="data.email" />
+              <Password id="password" title="password" v-model="data.password" />
 
-              <button class="btn btn-outline-primary btn-lg btn-block" type="submit">Login</button>
+              <button class="btn btn-outline-primary btn-lg btn-block" type="submit" @click="login">Login</button>
             </div>
           </div>
         </div>
