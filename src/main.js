@@ -11,6 +11,13 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
+  apiKey: "AIzaSyBmWtsA2lWh4uvS9fFIWQFOuQ6crWRByCI",
+  authDomain: "vite-project-74d51.firebaseapp.com",
+  projectId: "vite-project-74d51",
+  storageBucket: "vite-project-74d51.appspot.com",
+  messagingSenderId: "915057438722",
+  appId: "1:915057438722:web:8229e461d473fb571c771b",
+  measurementId: "G-H6R9CJTGXH",
   apiKey: 画面に表示されている各自のプロジェクト設定を適宜入力してください,
   authDomain: 画面に表示されている各自のプロジェクト設定を適宜入力してください,
   projectId: 画面に表示されている各自のプロジェクト設定を適宜入力してください,
