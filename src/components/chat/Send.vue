@@ -6,7 +6,7 @@ const emit = defineEmits(['sendMessage']);
 const update = (value) => {
   const messageObj = {
     displayName: "自分さん",
-    uid: "jibun",
+    // uid: "jibun", →削除
     message: value,
   }
   emit('sendMessage', messageObj)
